@@ -27,14 +27,19 @@
 
 \section{Descrizione e requisiti}
 Il software ChaosJack va a fondere il gioco classico di Black Jack con le meccaniche strategiche e i modificatori tipici di giochi come Balatro, un incontro tra il Poker classico 
-e un videogioco di strategia e "rompicapo". L'obiettivo principale del giocatore è quello di sfidare e vincere contro il banco. Il banco da due carte al giocatore, e queste sono le sue carte di partenza,
-successivamente il banco scarta una carta e gira la successiva a faccia scoperta sul tavolo. Il valore della carta è 10 se è una figura, può valere 1 o 11 se è un asso a descrizione di chi la pesca, 
+e un videogioco di strategia e "rompicapo". L'obiettivo principale del giocatore è quello di sfidare e vincere sia contro il banco sia contro gli altri giocatori presenti al tavolo. Oltre ai giocatori effettivi saranno presenti dei giocatori bot, che seguiranno le regole di gioco in automatico.Il giocatore per partecipare alla partita deve fare una puntata base. Successivamente il banco da due carte ad ogni giocatore, e queste sono le sue carte di partenza, che verranno date scoperte.
+Successivamente il banco scarta una carta e gira la successiva a faccia scoperta sul tavolo. Il valore della carta è 10 se è una figura, può valere 1 o 11 se è un asso a descrizione di chi la pesca, 
 il restante delle carte valgono quanto indicato nella carta stessa. A questo punto il giocatore in base al punteggio delle sue carte decide se chiedere un ulteriore carta al banco, la richiesta può essere effettuta più volte durante il suo turno.
-Se la somma delle carte in mano supera 21 il giocatore è fuori e vince automaticamente il banco. Quando il giocatore decide di fermarsi il turno passa al banco e pesca lui stesso dal mazzo le carte scartando sempre la prima e girando la seconda sommando di volta in volta 
-il valore delle carte girate. Il banco ha l'obbligo di arrivare almeno a 17 di punteggio, poi può decidere se continuare a pescare o a fermarsi. Il superamento del valore 21 vale anche per il banco, in caso succeda il banco è fuori e vince automaticamente il giocatore.
-A differenza del Blackjack tradizionale, nel mazzo saranno presenti 4 jolly (2 rossi e 2 neri), che daranno un vantaggio a seconda di chi li pesca. Inoltre c'è la possibilità di triplicare la vincita se tutte le carte in mano, con cui si vince la partita, siano dello stesso colore.
-Tuttavia non ci sono solo vantaggi, ma anche delle carte che possono svantaggiare chi le pesca, queste carte sono dette "maleddette". Una carta viene etichettata come maledetta quando il giocatore che la pesca supera 21. Iniziata la nuova partita, quando il giocatore pesca una carta "maledetta" vedrà il valore di questa raddoppiato.
-Ogni due partite giocate sarà presente un round speciale, dove verranno posti degli ulteriori limiti durante il gioco (ad esempio, tutte le carte di fiori verranno pescate a faccia in giù oppure in questo round puoi pescare solo una carta). 
+Se durante la richieste delle carte, la somma di esse in mano supera 21, il giocatore in turno perde automaticamente ed è fuori dalla partita. Il turno di un giocatore finisce quando decide di "stare", ovvere quando non vuole pescare ulteriori carte.
+Poi il turno passa al giocatore successivo. Il banco quando ha finito di servire tutti i giocatori presenti al tavolo, questi possono fare delle ulteriori scommesse, scegliendo una somma a sue discrizione o raddoppiando quanto messo precedentemente, prima che giochi il banco.
+Finita la fase finale di scomesssa dei giocatori, il turno passa al banco e pesca lui stesso dal mazzo le carte, scartando sempre la prima e girando la seconda sommando di volta in volta 
+il valore delle carte girate. Il banco ha l'obbligo di arrivare almeno a 17 di punteggio, poi può decidere se continuare a pescare o a fermarsi. 
+Il superamento del valore 21 vale anche per il banco, in caso succeda il banco è fuori e la vincita verrà contesa tra chi ha il punteggio più alto tra i giocatori ancora attivi. In questo situazione se i giocatori pareggiano con stesso punteggio e stesso numero di carte, la vincita verrà raddoppiata e divisa tra i giocatori.
+Se il banco non è fuori si hanno diverse caratteristiche per decretare il vincitore, essendo un tutti contro tutti, per vincere bisogna battere sia il banco che gli altri giocatori. In caso di pareggio con il banco o un altro giocatore vince chi ha meno carte in mano.
+Alla fine della partita se vince solo un giocatore, egli otterrà come vincita la somma del piatto raddoppiata. Nel piatto sono presenti le fiches scommesse da tutti giocatori durante la partita. Se la vincita viene fatta con il punteggio massimo, ovvero si fa Blackjack, il valore del piatto viene triplicato, se invece viene fatta con una mano avente carte tutte dello stesso colore, si avrà un bonus 
+dove la vincita viene triplica. In fine in caso di vincita con Blackjack e bonus, il valore del piatto viene moltiplicato per cinque.
+All'avvio di una partita il giocatore potrebbe imbattersi in una partita "speciale", dove sono inseriti dei vincoli che modificano i punteggi delle carte.
+Inoltre a differenza del Blackjack tradizionale, nel mazzo saranno presenti delle carte speciali con un proprio punteggio.
 
 \subsubsection{Requisiti funzionali}
 \begin{itemize}
@@ -46,100 +51,49 @@ Ogni due partite giocate sarà presente un round speciale, dove verranno posti d
 
 \subsubsection{Requisiti non funzionali}
 \begin{itemize}
-	\item L'interfaccia utente deve sincronizzarsi in modo fluido e reattivo con la logica di gioco, aggiornandosi istantaneamente a ogni variazione di stato.
-	\item Il sistema deve essere progettato in modo estensibile, garantendo la possibilità di aggiungere nuovi turni speciali o regole senza dover alterare le meccaniche di base del gioco.
+	\item L'interfaccia utente deve essere reattiva, restituendo un feedback visivo immediato a ogni azione del giocatore senza ritardi percettibili.
+	\item Il sistema deve supportare l'aggiunta futura di nuovi modificatori, turni speciali o regole. 
 \end{itemize}
 
 
 \section{Modello del Dominio}
 
-In questa sezione si descrive il modello del \textit{dominio
-applicativo}, descrivendo le \textit{entità} in gioco ed i rapporti fra loro.
-%
-Si possono sollevare eventuali aspetti particolarmente impegnativi, descrivendo perché lo sono, senza inserire idee circa possibili soluzioni, ovvero sull'organizzazione interna del software.
-%
-Infatti, la fase di analisi va effettuata \textbf{prima} del progetto: né il progetto né il software esistono nel momento in cui si effettua l'analisi.
-%
-La discussione di aspetti propri del software (ossia, della \textit{soluzione} al problema e non del problema stesso) appartengono alla sfera della progettazione, e vanno discussi successivamente.
-
-È obbligatorio fornire uno schema UML del dominio, che diventerà anche lo scheletro della
-parte ``entity'' del modello dell'applicazione, ovvero degli elementi costitutivi del modello (in ottica MVC - Model View Controller): se l'analisi è ben fatta, dovreste ottenere una gerarchia di concetti che rappresentano le entità che compongono il problema da risolvere.
-%
-Un'analisi ben svolta \textbf{prima} di cimentarsi con lo sviluppo rappresenta un notevole aiuto per
-le fasi successive: è sufficiente descrivere a parole il dominio, quindi estrarre i sostantivi
-utilizzati, capire il loro ruolo all'interno del problema, le relazioni che intercorrono fra loro, e
-reificarli in interfacce.
-
-\subsection*{Elementi positivi}
-\begin{itemize}
-	\item Si modella il dominio in forma di UML\@.
-	\item Viene descritto accuratamente il modello del dominio.
-	\item Il modello cattura le entità di dominio, le loro caratteristiche principali,
-	\item e le relazioni che intercorrono fra di loro.
-\end{itemize}
-
-\subsection*{Elementi negativi}
-\begin{itemize}
-	\item Manca una descrizione a parole del modello del dominio.
-	\item Manca una descrizione UML delle entità del dominio e delle relazioni che intercorrono fra loro.
-	\item Vengono presentati elementi di design, o peggio, implementativi.
-	\item Viene mostrato uno schema UML che include elementi implementativi o non utili alla descrizione del dominio,
-	ma volti alla soluzione (non devono vedersi, ad esempio, campi o metodi privati).
-\end{itemize}
-
-\subsection*{Esempio}
-GLaDOS dovrà essere in grado di accedere ad un'insieme di camere di test.
-%
-Tale insieme di camere prende il nome di percorso.
-%
-Ciascuna camera è composta di challenge successivi.
-%
-GLaDOS è responsabile di associare a ciascun challenge un insieme di consigli (suggestions) destinati all'utente (subject), dipendenti da possibili eventi.
-%
-GLaDOS dovrà poter comunicare coi locali cucina per approntare le torte.
-%
-Le torte potranno essere dolci, oppure semplici promesse di dolci che verranno disattese.
-%
-Gli elementi costitutivi il problema sono sintetizzati in \Cref{img:analysis}.
-
-Data la complessità di elaborare consigli via AI senza intervento umano, la prima versione del software fornita prevederà una serie di consigli forniti dall'utente.
-%
-Il requisito non funzionale riguardante il consumo energetico richiederà studi specifici sulle performance di GLaDOS che non potranno essere effettuati all'interno del monte ore previsto: tale feature sarà oggetto di futuri lavori.
+L'ambiente principale è il tavolo, il quale riunisce tutte le entità coinvolte e scandisce lo svolgimento del gioco. Al tavolo siedono i partecipanti, ovvero il banco, i giocatori e i giocatori bot (i quali seguono logiche autonome). Ciascun partecipante è dotato di un proprio portafoglio di fisches e riceve una mano di carte.
+L'intero flusso della partita al tavolo è organizzato in una sequenza di fasi ben distinte (come la puntata iniziale o la fase di gioco). 
+All'interno di ogni fase, l'azione si artiola nei turni individuali dei partecipanti. Durante le fasi di socmmessa, le fiches convergono in un piatto centrale. Le carte vengono fornite da un mazzo,  che include sia le carte classiche che speciali.
+Infine, specifiche partite possono essere alterate dall'applicazione di modificatori, i quali introducono vincoli temporanei alle regole di base alterando le normali fasi di gioco.
 
 \begin{figure}[H]
 	\centering{}
-	\includegraphics{img/analysis.pdf}
+	\includegraphics[width=0.8\textwidth]{UML_dominio.png}
 	\caption{Schema UML dell'analisi del dominio, con rappresentate le entità principali ed i rapporti fra loro}
 	\label{img:analysis}
 \end{figure}
 
 \chapter{Design}
 
-In questo capitolo si spiegano le strategie messe in campo per soddisfare i requisiti identificati nell'analisi.
-
-Si parte da una visione architetturale, il cui scopo è informare il lettore di quale sia il funzionamento dell'applicativo realizzato ad alto livello.
-%
-In particolare, è necessario descrivere accuratamente in che modo i componenti principali del sistema si coordinano fra loro.
-%
-A seguire, si dettagliano alcune parti del design, quelle maggiormente rilevanti al fine di chiarificare la logica con cui sono stati affrontati i principali aspetti dell'applicazione.
-
 \section{Architettura}
 
-Questa sezione spiega come le componenti principali del software interagiscono fra loro.
-%
-In particolare, qui va spiegato \textbf{se} e \textbf{come} è stato utilizzato il pattern
-architetturale model-view-controller (e/o alcune sue declinazioni specifiche, come entity-control-boundary).
+L'architettura adottata per il progetto ChaosJack segue il pattern architteturale MVC(Model-View-Cotroller). Questo pattern consente di avere una chiara separazione delle responsablità e una maggiore flessibilità in fase di sviluppo, permettendoci di separare la logica di gioco dalla sua rappresentazione grafica.
+Ovvero è possibile sostituire il blocco della view senza richiedere alcuna modifica nel Controller e nel Model.
+L'architettura si basa su queste componenti principali:
+\begin{itemize}
+	\item GameEngine
+	\item Table 
+	\item ViewManager
+	\item GameFlowController
+	\item ActionController
+\end{itemize}
+Il GameEngine e Table si occupano di gestire e mantenere in modo consistente lo stato interno del gioco (il mazzo di carte, i portafogli dei partecipanti, il calcolo dei punteggi nelle mani). Inoltre il GameEngine valida ed esegue tutte le mutazioni dello stato di gioco secondo le regole tradizionali del BlackJack e l'applicazione dei relativi modificatori speciali. Il controller rappresenta il motore attivo che si occupa di dettare  i tempi 
+e l'ordine delle diverse fasi della partita (regolando i turni tra i giocatori presenti nel tavolo).  
+Il ViewManager ha il ruolo generale di gestire la visualizzazione dei componenti all'interno della finestra, mostrando l'evoluzione della partita. Si occupa, inoltre, di gestire la fase di navigazione del menù, consentendo di avviare una nuova partita o vedere le statistiche dei round giocati.
 
-Se non è stato utilizzato MVC, va spiegata in maniera molto accurata l'architettura scelta, giustificandola in modo appropriato.
-
-Se è stato scelto MVC, vanno identificate con precisione le interfacce e classi che rappresentano i punti d'ingresso per modello, view, e controller.
-Raccomandiamo di sfruttare la definizione del dominio fatta in fase di analisi per capire quale sia l'entry point del model, e di non realizzare un'unica macro-interfaccia che, spesso, finisce con l'essere il prodromo ad una ``God class''.
-%
-Consigliamo anche di separare bene controller e model, facendo attenzione a non includere nel secondo strategie d'uso che appartengono al primo.
-
-In questa sezione vanno descritte, per ciascun componente architetturale che ruoli ricopre (due o tre ruoli al massimo), ed in che modo interagisce (ossia, scambia informazioni) con gli altri componenti dell'architettura.
-%
-Raccomandiamo di porre particolare attenzione al design dell'interazione fra view e controller: se ben progettato, sostituire in blocco la view non dovrebbe causare alcuna modifica nel controller (tantomeno nel model).
+\begin{figure}[H]
+	\centering{}
+	\includegraphics[width=0.8\textwidth]{UML_architettura.png}
+	\caption{Schema UML dell'architettura MVC realizzata per ChaosJack}
+	\label{img:architettura}
+\end{figure}
 
 \subsection*{Elementi positivi}
 \begin{itemize}
