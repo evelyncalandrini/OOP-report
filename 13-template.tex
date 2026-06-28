@@ -27,25 +27,25 @@
 
 \section{Descrizione e requisiti}
 Il software ChaosJack va a fondere il gioco classico di Black Jack con le meccaniche strategiche e i modificatori tipici di giochi come Balatro, un incontro tra il Poker classico 
-e un videogioco di strategia e "rompicapo". L'obiettivo principale del giocatore è quello di sfidare e vincere sia contro il banco sia contro gli altri giocatori presenti al tavolo. Oltre ai giocatori effettivi saranno presenti dei giocatori bot, che seguiranno le regole di gioco in automatico.Il giocatore per partecipare alla partita deve fare una puntata base. Successivamente il banco da due carte ad ogni giocatore, e queste sono le sue carte di partenza, che verranno date scoperte.
-Successivamente il banco scarta una carta e gira la successiva a faccia scoperta sul tavolo. Il valore della carta è 10 se è una figura, può valere 1 o 11 se è un asso a descrizione di chi la pesca, 
-il restante delle carte valgono quanto indicato nella carta stessa. A questo punto il giocatore in base al punteggio delle sue carte decide se chiedere un ulteriore carta al banco, la richiesta può essere effettuta più volte durante il suo turno.
-Se durante la richieste delle carte, la somma di esse in mano supera 21, il giocatore in turno perde automaticamente ed è fuori dalla partita. Il turno di un giocatore finisce quando decide di "stare", ovvere quando non vuole pescare ulteriori carte.
-Poi il turno passa al giocatore successivo. Il banco quando ha finito di servire tutti i giocatori presenti al tavolo, questi possono fare delle ulteriori scommesse, scegliendo una somma a sue discrizione o raddoppiando quanto messo precedentemente, prima che giochi il banco.
-Finita la fase finale di scomesssa dei giocatori, il turno passa al banco e pesca lui stesso dal mazzo le carte, scartando sempre la prima e girando la seconda sommando di volta in volta 
-il valore delle carte girate. Il banco ha l'obbligo di arrivare almeno a 17 di punteggio, poi può decidere se continuare a pescare o a fermarsi. 
-Il superamento del valore 21 vale anche per il banco, in caso succeda il banco è fuori e la vincita verrà contesa tra chi ha il punteggio più alto tra i giocatori ancora attivi. In questo situazione se i giocatori pareggiano con stesso punteggio e stesso numero di carte, la vincita verrà raddoppiata e divisa tra i giocatori.
-Se il banco non è fuori si hanno diverse caratteristiche per decretare il vincitore, essendo un tutti contro tutti, per vincere bisogna battere sia il banco che gli altri giocatori. In caso di pareggio con il banco o un altro giocatore vince chi ha meno carte in mano.
-Alla fine della partita se vince solo un giocatore, egli otterrà come vincita la somma del piatto raddoppiata. Nel piatto sono presenti le fiches scommesse da tutti giocatori durante la partita. Se la vincita viene fatta con il punteggio massimo, ovvero si fa Blackjack, il valore del piatto viene triplicato, se invece viene fatta con una mano avente carte tutte dello stesso colore, si avrà un bonus 
-dove la vincita viene triplica. In fine in caso di vincita con Blackjack e bonus, il valore del piatto viene moltiplicato per cinque.
-All'avvio di una partita il giocatore potrebbe imbattersi in una partita "speciale", dove sono inseriti dei vincoli che modificano i punteggi delle carte.
-Inoltre a differenza del Blackjack tradizionale, nel mazzo saranno presenti delle carte speciali con un proprio punteggio.
+e un videogioco di strategia e "rompicapo". L'obiettivo principale del giocatore è quello di sfidare e vincere sia contro il banco sia contro gli altri giocatori presenti al tavolo. Oltre ai giocatori effettivi saranno presenti dei giocatori bot, che seguiranno le regole di gioco in automatico.
+Svolgimento della partita: 
+\begin{itemize}
+	\item Fase iniziale: Per partecipare, ogni giocatore effettua una puntata base. Il banco distribuisce due carte scoperte a ciascun giocatore e a se stesso (scartando la prima e mostrando la seconda).
+	\item Valore delle carte: Le figure valgono 10, l'Asso vale 1 o 11 a discrezione del giocatore, le altre carte mantengono il loro valore nominale.
+	\item Turno del giocatore: In base al proprio punteggio, il giocatore può chiedere ulteriori carte ("hit") più volte. Se la somma supera 21, il giocatore sballa ed è fuori dalla partita. Il turno termina quando il giocatore decide di fermarsi ("stand").
+	\item Fase di puntata finale : Terminato il turno di tutti i giocatori, è possibile effettuare ulteriori scommesse scegliendo una somma o raddoppiando il precedente(questo solo se si possegono due carte in mano).
+	\item Turno del banco: Il banco pesca carte fermandosi obbligatoriamente al raggiungimento di un punteggio pari o superiori a 17. Se il banco supera 21, la vincita è contesa tra i giocatori ancora attivi con il punteggio più alto.
+\end{itemize}
+Condizioni di vittoria e punteggi :
+Essendo un tutti contro tutti, per vincere bisogna battere sia il banco che gli altri giocatori.  A parità di punteggio, vince chi ha meno carte in mano. Se il pareggio persiste tra più giocatori, la vincita viene divisa. La vincita standard raddoppia il piatto. Il raggiungimento del Blackjack triplica il piatto, mentre una mano monocolore fornisce un moltiplicatore bonus.
+Inoltre, all'avvio di una partita, il giocatore potrebbe imbattersi in turni "speciali" e carte speciali con vincoli che alterano i punteggi.
+
 
 \subsubsection{Requisiti funzionali}
 \begin{itemize}
 	\item Il sistema deve permettere lo svolgimento della logica di base del Blackjack, includendo la distribuzione iniziale delle carte e il loro mescolamento. Inoltre deve garantire le azioni di richiesta delle carte, fermarsi, uscire e puntare.
 	\item Il sistema deve calcolare correttamente i punteggi delle mani, gestendo la soglia massima del 21 e le regole specifiche associate alle singole carte.
-	\item Il gioco deve incrementare automaticamente la difficoltà nei turni speciali, applicando modificatori alle regole di base.
+	\item Il gioco deve applicare automaticamente le alterazioni delle regole durante i turni speciali.
 	\item Il software deve gestire i portafogli virtuali (fish) sia del giocatore che del banco, aggiornandoli in base all'esito delle puntate.
 \end{itemize}
 
@@ -58,9 +58,9 @@ Inoltre a differenza del Blackjack tradizionale, nel mazzo saranno presenti dell
 
 \section{Modello del Dominio}
 
-L'ambiente principale è il tavolo, il quale riunisce tutte le entità coinvolte e scandisce lo svolgimento del gioco. Al tavolo siedono i partecipanti, ovvero il banco, i giocatori e i giocatori bot (i quali seguono logiche autonome). Ciascun partecipante è dotato di un proprio portafoglio di fisches e riceve una mano di carte.
+L'ambiente principale è il tavolo, il quale riunisce tutte le entità coinvolte e scandisce lo svolgimento del gioco. Al tavolo siedono i partecipanti, ovvero il banco, i giocatori e i giocatori bot (i quali seguono logiche autonome). Ciascun partecipante è dotato di un proprio portafoglio di fiches e riceve una mano di carte.
 L'intero flusso della partita al tavolo è organizzato in una sequenza di fasi ben distinte (come la puntata iniziale o la fase di gioco). 
-All'interno di ogni fase, l'azione si artiola nei turni individuali dei partecipanti. Durante le fasi di socmmessa, le fiches convergono in un piatto centrale. Le carte vengono fornite da un mazzo,  che include sia le carte classiche che speciali.
+All'interno di ogni fase, l'azione si articola nei turni individuali dei partecipanti. Durante le fasi di scommessa, le fiches convergono in un piatto centrale. Le carte vengono fornite da un mazzo, che include sia le carte classiche che speciali.
 Infine, specifiche partite possono essere alterate dall'applicazione di modificatori, i quali introducono vincoli temporanei alle regole di base alterando le normali fasi di gioco.
 
 \begin{figure}[H]
@@ -74,19 +74,22 @@ Infine, specifiche partite possono essere alterate dall'applicazione di modifica
 
 \section{Architettura}
 
-L'architettura adottata per il progetto ChaosJack segue il pattern architteturale MVC(Model-View-Cotroller). Questo pattern consente di avere una chiara separazione delle responsablità e una maggiore flessibilità in fase di sviluppo, permettendoci di separare la logica di gioco dalla sua rappresentazione grafica.
+L'architettura adottata per il progetto ChaosJack segue il pattern architteturale MVC(Model-View-Controller). Questo pattern consente di avere una chiara separazione delle responsablità e una maggiore flessibilità in fase di sviluppo, permettendoci di separare la logica di gioco dalla sua rappresentazione grafica.
 Ovvero è possibile sostituire il blocco della view senza richiedere alcuna modifica nel Controller e nel Model.
 L'architettura si basa su queste componenti principali:
 \begin{itemize}
-	\item GameEngine
-	\item Table 
-	\item ViewManager
-	\item GameFlowController
-	\item ActionController
+	\item Model : GameEngine e Table
+	\item Controller : GameFlowController e ActionController
+	\item View : ViewManager
 \end{itemize}
-Il GameEngine e Table si occupano di gestire e mantenere in modo consistente lo stato interno del gioco (il mazzo di carte, i portafogli dei partecipanti, il calcolo dei punteggi nelle mani). Inoltre il GameEngine valida ed esegue tutte le mutazioni dello stato di gioco secondo le regole tradizionali del BlackJack e l'applicazione dei relativi modificatori speciali. Il controller rappresenta il motore attivo che si occupa di dettare  i tempi 
-e l'ordine delle diverse fasi della partita (regolando i turni tra i giocatori presenti nel tavolo).  
-Il ViewManager ha il ruolo generale di gestire la visualizzazione dei componenti all'interno della finestra, mostrando l'evoluzione della partita. Si occupa, inoltre, di gestire la fase di navigazione del menù, consentendo di avviare una nuova partita o vedere le statistiche dei round giocati.
+Il Model : Si occupa di gestire e mantenere in modo consistente lo stato interno del gioco (il mazzo di carte, i portafogli dei partecipanti, il calcolo dei punteggi nelle mani). Valida ed esegue tutte le mutazioni dello stato di gioco secondo le regole tradizionali del BlackJack e l'applicazione dei relativi modificatori speciali.
+\\
+Il controller : Rappresenta il motore attivo che si occupa di dettare  i tempi e l'ordine delle diverse fasi della partita (regolando i turni tra i giocatori presenti nel tavolo).
+\\
+La View: Ha il ruolo generale di gestire la visualizzazione dei componenti all'interno della finestra, mostrando l'evoluzione della partita. Si occupa, inoltre, di gestire la fase di navigazione del menù, consentendo di avviare una nuova partita o vedere le statistiche dei round giocati. P
+
+Grazie a questa architettura è possibile sostituire il blocco della view senza richiedere alcuna modifica nel Controller e nel Model.
+La View si limita a notificare le azioni dell'utente al Controller. Sarà poi il Controller a invocare i metodi appropriati sul Model per aggiornare lo stato.
 
 \begin{figure}[H]
 	\centering{}
@@ -95,67 +98,32 @@ Il ViewManager ha il ruolo generale di gestire la visualizzazione dei componenti
 	\label{img:architettura}
 \end{figure}
 
-\subsection*{Elementi positivi}
-\begin{itemize}
- \item Si mostrano pochi, mirati schemi UML dai quali si deduce con chiarezza quali sono le parti principali del software e come interagiscono fra loro.
- \item Si mette in evidenza se e come il pattern architetturale model-view-controller è stato applicato, anche con l'uso di un UML che mostri le interfacce principali ed i rapporti fra loro.
- \item Si discute se sia semplice o meno, con l'architettura scelta, sostituire in blocco la view:
- 	in un MVC ben fatto, controller e modello non dovrebbero in alcun modo cambiare se si transitasse da una libreria grafica ad un'altra (ad esempio, da Swing a JavaFX, o viceversa).
-\end{itemize}
-
-\subsection*{Elementi negativi}
-\begin{itemize}
- \item L'architettura è fatta in modo che sia impossibile riusare il modello per un software diverso che affronta lo stesso problema.
- \item L'architettura è tale che l'aggiunta di una funzionalità sul controller impatta pesantemente su view e/o modello.
- \item L'architettura è tale che la sostituzione in blocco della view impatta sul controller o, peggio ancora, sul modello.
- \item Si presentano UML caotici, difficili da leggere.
- \item Si presentano UML in cui sono mostrati elementi di dettaglio non appartenenti all'architettura, ad esempio includenti campi o con metodi che non interessano la parte di interazione fra le componenti principali del software.
- \item Si presentano schemi UML con classi (nel senso UML del termine) che ``galleggiano'' nello schema, non connesse, ossia senza relazioni con il resto degli elementi inseriti.
- \item Si presentano elementi di design di dettaglio, ad esempio tutte le classi e interfacce del modello o della view.
- \item Si discutono aspetti implementativi, ad esempio eventuali librerie usate oppure dettagli di codice.
-\end{itemize}
-
-\subsection*{Esempio}
-
-L'architettura di GLaDOS segue il pattern architetturale MVC.
-%
-Più nello specifico, a livello architetturale, si è scelto di utilizzare MVC in forma ``ECB'', ossia ``entity-control-boundary''\footnote{
-Si fa presente che il pattern ECB effettivamente esiste in letteratura come ``istanza'' di MVC, e chi volesse può utilizzarlo come reificazione di MVC.
-}.
-%
-GLaDOS implementa l'interfaccia AI, ed è il controller del sistema.
-Essendo una intelligenza artificiale, è una classe attiva.
-%
-GLaDOS accetta la registrazione di Input ed Output, che fanno parte della ``view'' di MVC, e sono il ``boundary'' di ECB.
-Gli Input rappresentano delle nuove informazioni che vengono fornite all'IA, ad esempio delle modifiche nel valore di un sensore, oppure un comando da parte dell'operatore.
-Questi input infatti forniscono eventi.
-Ottenere un evento è un'operazione bloccante: chi la esegue resta in attesa di un effettivo evento.
-Di fatto, quindi, GLaDOS si configura come entità \textit{reattiva}.
-Ogni volta che c'è un cambio alla situazione del soggetto, GLaDOS notifica i suoi Output,
-informandoli su quale sia la situazione corrente.
-%
-Conseguentemente, GLaDOS è un ``observable'' per Output.
-
-\begin{figure}[h]
-\centering{}
-\includegraphics[width=\textwidth]{img/arch}
-\caption{Schema UML architetturale di GLaDOS. L'interfaccia \texttt{GLaDOS} è il controller del sistema, mentre \texttt{Input} ed \texttt{Output} sono le interfacce che mappano la view (o, più correttamente in questo specifico esempio, il boundary). Un'eventuale interfaccia grafica interattiva dovrà implementarle entrambe.}
-\label{img:goodarch}
-\end{figure}
-
-Con questa architettura, possono essere aggiunti un numero arbitrario di input ed output
-all'intelligenza artificiale.
-%
-Ovviamente, mentre l'aggiunta di output è semplice e non richiede alcuna modifica all'IA, la
-presenza di nuovi tipi di evento richiede invece in potenza aggiunte o rifiniture a GLaDOS.
-%
-Questo è dovuto al fatto che nuovi Input rappresentano di fatto nuovi elementi della business
-logic, la cui alterazione od espansione inevitabilmente impatta il controller del progetto.
-
-In \Cref{img:goodarch} è esemplificato il diagramma UML architetturale.
 
 
 \section{Design dettagliato}
+
+\subsection*{Evelyn Calandrini - Gestione del Tavolo, Valutazione dei Round, Statistiche e View}
+Il contributo si è focalizzato sulla definizione del tavolo che si occupa di riunire il gioco (partecipanti, carte e regole di gioco) occupandosi poi alla fine del round di valutare il vincitore della partita. Si aggiornano così le statistiche salvando il risultato della partita. 
+Inoltre il contributo va nell'interfaccia con la gestione del cambio di finestra dalla situazione di gioco, menu, pausa e statistiche.
+
+\textbf{Gestone dello Stato e delle puntate}
+\\
+\begin{figure}[H]
+	\centering{}
+	\includegraphics[width=0.3\textwidth]{UML-gestioneStatoTavolo.png}
+	\caption{Schema UML rappresenta la gestioni delle fasi di gioco del tavolo}
+	\label{img:design}
+\end{figure}
+\textbf{Problema} : In un ambiene di gioco a turni, è neccessario garantire che le azione dei singoli giocatori (come effettuare una puntata o chiedere le carte) avvengano esclusivamente nelle fasi corrette di gioco, prevendendo stati inconsistenti o alterazioni 
+illecite del piatto.
+\\ 
+\textbf{Soluzione} : Il sistema utilizza un approccio basato su enumerazione (State) per indentificare le varie fasi di gioco e con il relativo metodo di transazione (next())
+Il tavolo (TableImpl) verfica lo stato corrente prima di ogni operaizone. In questo modo le varie azione di gioco controllano prima di essere nello stato corretto, se l'azione non è ammessa l'esecuzione viene interrotta lanciando un eccezione. 
+
+
+
+
+
 
 In questa sezione si possono approfondire alcuni elementi del design con maggior dettaglio.
 %
