@@ -6,8 +6,6 @@
 \usepackage{float}
 \usepackage{xcolor}
 \usepackage{hyperref}
-
-% Questo commentalo se vuoi scrivere in inglese.
 \usepackage[italian]{babel}
 
 \usepackage[italian]{cleveref}
@@ -161,6 +159,44 @@ Gestire la transizione tra le scene e la pulizia delle finestre distribuendo la 
 Invece di effettuare chiamate incrociate tra le varie schermate, il Controller interagisce esclusivamente con questa interfaccia unificata.
 Il ViewManager si occupa internamente di scambiare i nodi e aggiornare lo Stage principale. 
 Questa soluzione reifica il pattern Facade, fornendo un punto di accesso semplificato e isolando i Controller dalle complessità della libreria grafica.
+
+\subsection*{Elena Lungu - Gestione delle carte speciali, dei modificatori, wallet e view}
+In questa sezione verranno analizzate le scelte progettuali relative alla modellazione delle carte da gioco e del portafoglio del giocatore, componenti fondamentali per l'esperienza di gioco di ChaosJack.
+
+\paragraph{Gestione delle Carte Speciali e Modificatori}
+\begin{figure}[H]
+	\centering{}
+	\includegraphics[width=0.45\textwidth]{UML_modificatori.png}
+	\caption{Diagramma UML che illustra la relazione tra \texttt{StandardCard} e \texttt{CardModifier}.}
+	\label{img:modificatori}
+\end{figure}
+\paragraph{Problema} : Il gioco ChaosJack introduce la presenza di carte speciali (dette carte "Chaos") che alterano le regole standard del Blackjack, modificando i punteggi o il normale flusso di gioco attraverso l'uso di carte Bust, Reverse, Ghost. Creare una sottoclasse di \texttt{StandardCard} per ogni tipo di carta speciale avrebbe portato a una gerarchia rigida, difficile da mantenere e soggetta a esplosione combinatoria, rendendo complesso aggiungere nuovi effetti in futuro.
+\\ 
+\paragraph{Soluzione} : Al fine di modellare le carte speciali, si è scelto di applicare il principio fondamentale \textit{"Prefer Composition over Inheritance"}, evitando la creazione di una complessa gerarchia di sottoclassi. È stato introdotto il tipo \texttt{CardModifier}, il quale incapsula la logica necessaria ad alterare il valore della carta. In pratica, una \texttt{StandardCard} riceve il proprio modificatore al momento della creazione; da quel momento in poi, ogni volta che viene richiesto il punteggio della carta, quest'ultima si limita a delegare il calcolo direttamente al suo modificatore.
+
+Questa scelta progettuale è risultata nettamente superiore all'uso dell'ereditarietà per tre motivi principali:
+\begin{enumerate}
+	\item \textbf{Evita la Class Explosion}: L'uso dell'ereditarietà avrebbe richiesto la creazione di una sottoclasse per ogni singolo effetto (es. \texttt{BustCard}, \texttt{ReverseCard}, \texttt{GhostCard}). In presenza di numerose carte "Chaos", il numero di classi del dominio sarebbe diventato altissimo, rendendo la base di codice difficile da gestire.
+	\item \textbf{Rispetta il Principio Open/Closed}: Il sistema è aperto all'estensione ma chiuso alla modifica. Nuovi modificatori possono essere introdotti semplicemente aggiungendo elementi all'enumerazione, lasciando totalmente invariata la logica interna della classe \texttt{StandardCard}.
+	\item \textbf{Garantisce flessibilità per future combinazioni}: L'ereditarietà in Java è singola e statica, il che renderebbe impossibile applicare più effetti contemporaneamente senza ricorrere a classi duplicate. Con la composizione, l'architettura è già predisposta per evolvere verso una \texttt{List<CardModifier>} all'interno di \texttt{StandardCard}, permettendo di iterare e applicare combinazioni illimitate di effetti con estrema scalabilità.
+\end{enumerate}
+
+La soluzione messa in campo rappresenta un'applicazione del pattern \textit{Strategy}. Invece di definire il comportamento del calcolo del punteggio staticamente all'interno della classe, la \texttt{StandardCard} (che agisce come \textit{Context}) delega il calcolo del suo valore finale al \texttt{CardModifier} che le è stato iniettato.
+
+\paragraph{Disaccoppiamento e Rappresentazione del Wallet (View)}
+\begin{figure}[H]
+	\centering{}
+	\includegraphics[width=0.45\textwidth]{UML_walletview.png}
+	\caption{Diagramma UML che mostra l'incapsulamento della logica grafica in \texttt{PlayerWalletViewImpl}.}
+	\label{img:walletview}
+\end{figure}
+\paragraph{Problema} : Durante la partita, il giocatore deve avere costantemente sotto controllo il proprio saldo (fiches). Era necessario creare un'interfaccia utente grafica per il portafoglio che fosse indipendente dalla logica di gestione dei dati (\texttt{StandardWallet}), facilmente aggiornabile in tempo reale, e che garantisse uno stile visivo accattivante senza alterare le altre componenti della GUI.
+\\ 
+\paragraph{Soluzione} : È stata creata un'interfaccia specifica \texttt{PlayerWalletView} e la sua implementazione \texttt{PlayerWalletViewImpl}, che estende direttamente un componente JavaFX. L'implementazione maschera totalmente i dettagli grafici (come font, bordi colorati e l'effetto \texttt{DropShadow}) esponendo unicamente metodi di alto livello come \texttt{updateBalance(int newBalance)}.
+
+Come alternativa si era inizialmente valutato di inserire la struttura grafica del portafoglio direttamente nel file FXML principale della partita. Tuttavia, si è optato per l'estrazione in un componente JavaFX dedicato per massimizzare la modularità, il riuso e la \textit{Separation of Concerns}. Qualora in futuro il gioco venisse esteso per supportare più giocatori a schermo (es. multiplayer locale), l'attuale design permetterebbe di istanziare molteplici \texttt{PlayerWalletViewImpl} senza alcuna duplicazione di codice. Inoltre, questa scelta mantiene il Controller principale disaccoppiato e pulito, poiché quest'ultimo interagisce con la View del Wallet solo tramite metodi ad alto livello, senza conoscere i dettagli del rendering interno o la gestione dei nodi figli.
+
+Qui emerge chiaramente l'uso architetturale del pattern MVC applicato ai singoli componenti. \texttt{PlayerWalletViewImpl} agisce come View pura: non possiede alcuna logica di gestione dei dati, non calcola le puntate né verifica se il saldo sia sufficiente (compiti di competenza del Model \texttt{StandardWallet}), ma si limita a visualizzare il valore fornito dal Controller tramite il metodo di aggiornamento.
 
 \chapter{Sviluppo}
 \section{Testing automatizzato}
