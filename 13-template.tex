@@ -297,54 +297,53 @@ Permalink: \url{https://github.com/AlchemistSimulator/Alchemist/blob/d8a1799027d
 
 \chapter{Commenti finali}
 
-In quest'ultimo capitolo si tirano le somme del lavoro svolto e si delineano eventuali sviluppi
-futuri.
-
-\textit{Nessuna delle informazioni incluse in questo capitolo verrà utilizzata per formulare la valutazione finale}, a meno che non sia assente o manchino delle sezioni obbligatorie.
-%
-Al fine di evitare pregiudizi involontari, l'intero capitolo verrà letto dai docenti solo dopo aver formulato la valutazione.
-
 \section{Autovalutazione e lavori futuri}
 
-\textbf{È richiesta una sezione per ciascun membro del gruppo, obbligatoriamente}.
-%
-Ciascuno dovrà autovalutare il proprio lavoro, elencando i punti di forza e di debolezza in quanto prodotto.
-Si dovrà anche cercare di descrivere \emph{in modo quanto più obiettivo possibile} il proprio ruolo all'interno del gruppo.
-Si ricorda, a tal proposito, che ciascuno studente è responsabile solo della propria sezione: non è un problema se ci sono opinioni contrastanti, a patto che rispecchino effettivamente l'opinione di chi le scrive.
-Nel caso in cui si pensasse di portare avanti il progetto, ad esempio perché effettivamente impiegato, o perché sufficientemente ben riuscito da poter esser usato come dimostrazione di esser capaci progettisti, si descriva brevemente verso che direzione portarlo.
+\subsection*{Evelyn Calandrini}
+Il mio contributo al progetto si è concentrato principalmente sulla gestione del tavolo di gioco, sul sistema delle statistiche e sulla realizzazione dell'interfaccia utente.
+La gestione del tavolo ha richiesto particolare attenzione, poiché rappresenta il punto di incontro tra le diverse componenti del gioco e doveva garantire un corretto coordinamento delle varie funzionalità. Questa la ritengo la parte più complicata che ho dovuto affrontare.
+Per quanto riguarda le statistiche, ho cercato di sviluppare un sistema che raccogliesse e presentasse le informazioni principali in modo chiaro, mentre nella realizzazione dell'interfaccia ho cercato di realizzarla semplice per l'uso.
+Ritengo che il lavoro svolto sia stato soddisfacente e che le funzionalità di cui mi sono occupata siano state integrate correttamente con il resto del progetto. Durante lo sviluppo ho avuto modo di comprendere quanto sia importante progettare componenti modulari e ben separate, 
+così da facilitare sia l'integrazione con il lavoro degli altri membri del gruppo sia l'aggiunta di nuove funzionalità senza dover modificare pesantemente il codice esistente.
+Se il progetto dovesse essere portato avanti, ritengo che ci siano diversi aspetti che potrebbero essere migliorati. In particolare, il sistema delle statistiche potrebbe essere ampliato introducendo uno storico delle partite, classifiche o ulteriori informazioni sulle prestazioni dei giocatori. 
+Anche l'interfaccia grafica potrebbe essere resa più intuitiva e gradevole dal punto di vista estetico, aggiungendo animazioni, feedback visivi e maggiori possibilità di personalizzazione. 
+Infine, la gestione del tavolo potrebbe essere estesa per supportare nuove modalità di gioco o funzionalità aggiuntive, sfruttando la struttura modulare già realizzata.
+
 
 \section{Difficoltà incontrate e commenti per i docenti}
-
-Questa sezione, \textbf{opzionale}, può essere utilizzata per segnalare ai docenti eventuali problemi o difficoltà incontrate nel corso o nello svolgimento del progetto, può essere vista come una seconda possibilità di valutare il corso (dopo quella offerta dalle rilevazioni della didattica) avendo anche conoscenza delle modalità e delle difficoltà collegate all'esame, cosa impossibile da fare usando le valutazioni in aula per ovvie ragioni.
-%
-È possibile che alcuni dei commenti forniti vengano utilizzati per migliorare il corso in futuro: sebbene non andrà a vostro beneficio, potreste fare un favore ai vostri futuri colleghi.
-%
-Ovviamente \textit{il contenuto della sezione non impatterà il voto finale}.
+\subsection*{Evelyn Calandrini}
+Questo è stato il mio primo progetto e, soprattutto, la mia prima esperienza di sviluppo in un team. È stata un'esperienza molto formativa, che mi ha permesso di capire quanto sia importante non solo scrivere codice, 
+ma anche progettare correttamente il software, comunicare in modo efficace con gli altri membri del gruppo e sviluppare componenti che possano integrarsi facilmente con il lavoro degli altri.
 
 \appendix
 \chapter{Guida utente}
 
-Capitolo in cui si spiega come utilizzare il software. Nel caso in cui il suo uso sia del tutto
-banale, tale capitolo può essere omesso.
-%
-A tal riguardo, si fa presente agli studenti che i docenti non hanno mai utilizzato il software
-prima, per cui aspetti che sembrano del tutto banali a chi ha sviluppato l'applicazione possono non
-esserlo per chi la usa per la prima volta.
-%
-Se, ad esempio, per cominciare una partita con un videogioco è necessario premere la barra
-spaziatrice, o il tasto ``P'', è necessario che gli studenti lo segnalino.
+\begin{figure}[H]
+	\centering{}
+	\includegraphics[width=0.3\textwidth]{schermataPrincipale.png}
+	\caption{Schermata principale del gioco}
+	\label{img:schermata}
+\end{figure}
 
-\subsection*{Elementi positivi}
+All'avvio dell'applicazione viene mostrato il menu principale, dal quale l'utente può scegliere se avviare una nuova partita, visualizzare le statistiche oppure uscire dall'applicazione.
+Da ciascuna schermata è sempre possibile tornare al menu principale premendo il pulsante Menù.
+Selezionando il pulsante Play, viene avviata una nuova partita. 
 
+Durante il gioco sono disponibili due pulsanti principali:
 \begin{itemize}
- \item Si istruisce in modo semplice l'utente sull'uso dell'applicazione, eventualmente facendo uso di schermate e descrizioni.
+	\item Menu = che consente di tornare alla schermata principale;
+	\item Pausa = che permette di sospendere la partita. Da questa schermata l'utente può scegliere se riprendere il round in corso, ricominciare il round dall'inizio oppure tornare direttamente al menu principale.
 \end{itemize}
-
-\subsection*{Elementi negativi}
-\begin{itemize}
- \item Si descrivono in modo eccessivamente minuzioso tutte le caratteristiche, anche minori, del software in oggetto.
- \item Manca una descrizione che consenta ad un utente qualunque di utilizzare almeno le funzionalità primarie dell'applicativo.
-\end{itemize}
+Nella schermata di gioco sono visibili tutti i giocatori seduti al tavolo, ciascuno con il proprio portafoglio, oltre al dealer. Il nome del giocatore il cui turno è attualmente in corso viene evidenziato per facilitare la comprensione dello stato della partita. Potrà visualizzare anche il punteggio attuale in mano per facilitare 
+il calcolo con le carte e round speciali.
+Al centro della schermata vengono mostrate la fase di gioco corrente e il valore del piatto delle scommesse. Qualora sia in corso un round speciale, il relativo nome viene visualizzato nella parte superiore destra dell'interfaccia.
+L'utente può interagire con il gioco utilizzando i pulsanti disponibili per effettuare le proprie mosse e gestire le scommesse. All'inizio dopo aver effettuato la prima scomessa verranno distribuite le carte e poi l'utente continuerà a giocare. Al termine della partita viene mostrato un messaggio che indica il vincitore.
+\begin{figure}[H]
+	\centering{}
+	\includegraphics[width=0.3\textwidth]{schermataGioco.png}
+	\caption{Schermata di gioco in corso}
+	\label{img:schermataGioco}
+\end{figure}
 
 \chapter{Esercitazioni di laboratorio}
 
