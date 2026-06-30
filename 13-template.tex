@@ -199,12 +199,12 @@ Come alternativa si era inizialmente valutato di inserire la struttura grafica d
 Qui emerge chiaramente l'uso architetturale del pattern MVC applicato ai singoli componenti. \texttt{PlayerWalletViewImpl} agisce come View pura: non possiede alcuna logica di gestione dei dati, non calcola le puntate né verifica se il saldo sia sufficiente (compiti di competenza del Model \texttt{StandardWallet}), ma si limita a visualizzare il valore fornito dal Controller tramite il metodo di aggiornamento.
 
 \subsection*{Giulia Bardi-Gestione dei partecipanti,protezione input e distinzione Uman-bot }
-In questa sezione verranno analizzate le scelte progettuali relative alla modellazione della gerarchia dei giocatori e del controller delle azini del gioco.
+In questa sezione verranno analizzate le scelte progettuali relative alla modellazione della gerarchia dei giocatori e del controller delle azioni del gioco.
 
 \subsubsection*{Gerarchia dei Partecipanti(Giocatori,Dealer e bot)}
 
 \paragraph*{Problema}
-Nella struttura di ChaosJack sono presenti diverse tipologie di giocatori che prendono parte al gioco:Il giocatore umano(Player), il bot( Npc) e il banco (Dealer).
+Nella struttura di ChaosJack sono presenti diverse tipologie di giocatori che prendono parte al gioco:Il giocatore umano(Player), il bot( NPC) e il banco (Dealer).
 Ognuno di essi possiede logiche diverse ma tutti e tre condividono delle caratteristiche come il nome, una mano di carte e nel caso del giocatore umano e del bot anche un portafoglio.
 Implementare separatamente queste tipologie avrebbe portato ad una grande quantità di duplicazione del codice e difficoltà di gestione per il sistema.
 
@@ -231,7 +231,7 @@ Questa architettura utilizza il Polimorfismo e il principio della Composizione.
 \subsubsection*{Protezione degli input e Distinzione Umano-bot}
 \paragraph*{Problema}
 Essendo un gioco  a turni dove si mischiano giocatori umani e giocatori automatizzati come i bot e il banco si crea un problema di consistenza degli imput.
-Linterfaccia grafica inova i metodi pubblici de controller come \texttt{hit()} ,\texttt{stand()} e \texttt{doubleDown()} quando l’utente preme il pulsante.
+Linterfaccia grafica invoca i metodi pubblici del controller come \texttt{hit()} ,\texttt{stand()} e \texttt{doubleDown()} quando l’utente preme il pulsante.
 Se l’utente premesse tali pulsanti durante il turno di un bot ci sarebbe il rischio di alterare lo stato del gioco.
 
 \paragraph{Soluzione}
@@ -328,7 +328,9 @@ In un'ottica di sviluppo futuro,il progetto offre spunti di espansione come il m
 Questo è stato il mio primo progetto e, soprattutto, la mia prima esperienza di sviluppo in un team. È stata un'esperienza molto formativa, che mi ha permesso di capire quanto sia importante non solo scrivere codice, 
 ma anche progettare correttamente il software, comunicare in modo efficace con gli altri membri del gruppo e sviluppare componenti che possano integrarsi facilmente con il lavoro degli altri.
 
-
+\subsection*{Giulia Bardi}
+Essendo il mio primo progetto inizialmente è stato difficile capire come cordinarsi e lavorare in team,però penso che mi sia servito molto per migliorare. 
+Questo sia dal punto di vista puramente tecnica sia per comprendere l'importanza della comunicazione tra membri dello stesso gruppo.
 
 
 \appendix
