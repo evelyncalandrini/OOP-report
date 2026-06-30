@@ -218,22 +218,22 @@ La suite di test è stata suddivisa nelle seguenti aree funzionali:
 \subsection*{Evelyn Calandrini}
 
 \begin{itemize}
-    \item \textbf{Utilizzo della libreria JavaFX per l'interfaccia grafica} \\
+    \item \textbf{Utilizzo della libreria JavaFX per l'interfaccia grafica}
     Utilizzata per la gestione strutturale e il rendering del menu principale, del tavolo da gioco e della schermata delle statistiche. 
     Permalink: \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/master/src/main/java/it/unibo/chaosjack/view/impl/ViewManagerImpl.java#L31-L32}
-    \item \textbf{Utilizzo di lambda expression per i listener di eventi sulle properties} \\
+    \item \textbf{Utilizzo di lambda expression per i listener di eventi sulle properties}
     Usate per implementare in modo compatto i listener di ridimensionamento della scena (\texttt{widthProperty} e \texttt{heightProperty}). 
     Permalink: \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/master/src/main/java/it/unibo/chaosjack/view/impl/ViewManagerImpl.java#L47-L48}
-    \item \textbf{Utilizzo di Stream API e costrutti funzionali (uso concatenato di filter, map, findFirst e ifPresent con Optional)} \\
+    \item \textbf{Utilizzo di Stream API e costrutti funzionali (uso concatenato di filter, map, findFirst e ifPresent con Optional)} 
     Utilizzati per l'ispezione sicura della lista dei giocatori del motore di gioco e per l'aggiornamento del saldo dei rispettivi wallet. 
     Permalink: \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/TableImpl.java#L107-L111}
-    \item \textbf{Utilizzo del costrutto avanzato Switch Expressions} \\
+    \item \textbf{Utilizzo del costrutto avanzato Switch Expressions} 
     Utilizzato all'interno della gestione delle statistiche per smistare e aggiornare i contatori storici in base all'esito del round (\texttt{Outcome}). 
     Permalink: \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/StatisticsImpl.java#L24-L44}
-    \item \textbf{Utilizzo di riferimenti a metodi (Method Reference) e interfacce funzionali sulle Map} \\
+    \item \textbf{Utilizzo di riferimenti a metodi (Method Reference) e interfacce funzionali sulle Map}
     Utilizzati in combinazione con il metodo \texttt{Map.merge()} e \texttt{Integer::sum} per gestire e incrementare i piatti delle puntate in modo atomico. 
     Permalink: \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/TableImpl.java#L87}
-    \item \textbf{Utilizzo di annotazioni di librerie di terze parti per l'analisi statica (SpotBugs / FindBugs)} \\
+    \item \textbf{Utilizzo di annotazioni di librerie di terze parti per l'analisi statica (SpotBugs / FindBugs)} 
     Utilizzata l'annotazione \texttt{@SuppressFBWarnings} sul costruttore del tavolo per documentare l'esposizione intenzionale del riferimento al \texttt{GameEngine}. 
     Permalink: \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/TableImpl.java#L37-L40}
 \end{itemize}
