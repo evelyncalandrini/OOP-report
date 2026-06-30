@@ -222,7 +222,7 @@ Questa architettura utilizza il Polimorfismo e il principio della Composizione.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{UML-partecipanti.png}
+    \includegraphics[width=0.9\textwidth]{UML_partecipanti.png}
     \caption{Diagramma UML delle classi relative ai Partecipanti}
 \end{figure}
 
@@ -324,17 +324,17 @@ La suite di test è stata suddivisa nelle seguenti aree funzionali:
 \begin{itemize}
     \item \textbf{Utilizzo della classe Optional e costrutti funzionali}\\
     Utilizzato per il recupero del giocatore umano all'interno di ActionController.
-    Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+    Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L185}
 	\item \textbf{Utlizzo di lambda expressions}\\
 	Utilizzati nel controller tramite \texttt{map} per il casting a run-time.
-	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L186}
 	\item \textbf{Utilizzo di riferimenti a metodi(Method Reference)}\\
 	All'interno dell'\texttt{Optional} del Controller si è sfruttato il costrutto \texttt{this::isHumanPlayer}per passare la firma del metodo.
-	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L187}
 	\item \textbf{Utilizzo di annotazioni di librerie di terze parti (SpotBugs)}\\
 	L'annotazione \texttt{@SuppressFBWarnings} è stata utilizzata per gestire l'esposizione intenzionale dei riferimenti interni.
-	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
-                 \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/model/impl/AbstractPlayer.java}
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L31}
+                 \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/model/impl/AbstractPlayer.java#L39}
 \end{itemize}
 
 \subsection*{Beatrice Pallotti}
