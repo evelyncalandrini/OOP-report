@@ -198,6 +198,53 @@ Come alternativa si era inizialmente valutato di inserire la struttura grafica d
 
 Qui emerge chiaramente l'uso architetturale del pattern MVC applicato ai singoli componenti. \texttt{PlayerWalletViewImpl} agisce come View pura: non possiede alcuna logica di gestione dei dati, non calcola le puntate né verifica se il saldo sia sufficiente (compiti di competenza del Model \texttt{StandardWallet}), ma si limita a visualizzare il valore fornito dal Controller tramite il metodo di aggiornamento.
 
+\subsection*{Giulia Bardi-Gestione dei partecipanti,protezione input e distinzione Uman-bot }
+In questa sezione verranno analizzate le scelte progettuali relative alla modellazione della gerarchia dei giocatori e del controller delle azini del gioco.
+
+\subsubsection*{Gerarchia dei Partecipanti(Giocatori,Dealer e bot)}
+
+\paragraph*{Problema}
+Nella struttura di ChaosJack sono presenti diverse tipologie di giocatori che prendono parte al gioco:Il giocatore umano(Player), il bot( Npc) e il banco (Dealer).
+Ognuno di essi possiede logiche diverse ma tutti e tre condividono delle caratteristiche come il nome, una mano di carte e nel caso del giocatore umano e del bot anche un portafoglio.
+Implementare separatamente queste tipologie avrebbe portato ad una grande quantità di duplicazione del codice e difficoltà di gestione per il sistema.
+
+\paragraph*{Soluzione}
+Per risolvere questo problema si è scelto di creare un’interfaccia alla base \texttt{Partecipant} da cui poi derivano delle inerfaccie più specifiche per le varie tipologie di partecipanti come \texttt{Dealer}, \texttt{Player} e \texttt{NPC}.
+Per evitare la duplicazione del codice  nell’implementazione delle interfacce è stata creata la classe astratta  \texttt{AbstractPlayer} che fornisce l’implementazione di base per le classi condivise.
+L’Ereditarietà delle classi:
+
+\begin{enumerate}
+\item \texttt{DealerImpl} estende \texttt{AbstractPlayer} dove si implementano solo le logiche esclusive del banco.
+\item \texttt{PlayerImpl} estende \texttt{AbstractPlayer} e aggiunge la gestione del portafoglio e delle fisch \texttt{Wallet}.
+\item \texttt{NPCimpl} estende \texttt{Playerimpl} ereditando tutta la gestione economica aggiungendo solo la logica esclusiva ai bot.
+\end{enumerate}
+Questa architettura utilizza il Polimorfismo e il principio della Composizione.
+
+begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{UML-partecipanti.png}
+    \caption{Diagramma UML delle classi relative ai Partecipanti }
+\end{figure}
+
+
+
+\subsubsection*{Protezione degli input e Distinzione Umano-bot}
+\paragraph*{Problema}
+Essendo un gioco  a turni dove si mischiano giocatori umani e giocatori automatizzati come i bot e il banco si crea un problema di consistenza degli imput.
+Linterfaccia grafica inova i metodi pubblici de controller come \texttt{hit()} ,\texttt{stand()} e \texttt{doubleDown()} quando l’utente preme il pulsante.
+Se l’utente premesse tali pulsanti durante il turno di un bot ci sarebbe il rischio di alterare lo stato del gioco.
+
+\paragraph{Soluzione}
+I metodi di azioni dell’\texttt{ActionControllerImpl} sono diventati più controllati.
+Si ha implementato un metodo privato \texttt{getCurrentHumanPlayer()}, il quale verifica se il partecipante è effettivamente un giocatore umano oppure è un bot.
+Nel caso in cui si trattti di un bot, non è permesso all’utente premere i vari pulsanti.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{UML-ActionController.png}
+    \caption{Diagramma UML per l'ActionController}
+\end{figure}
+
 \chapter{Sviluppo}
 \section{Testing automatizzato}
 
@@ -238,6 +285,22 @@ La suite di test è stata suddivisa nelle seguenti aree funzionali:
     Permalink: \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/TableImpl.java#L37-L40}
 \end{itemize}
 
+\subsection*{Giulia Bardi}
+\begin{itemize}
+    \item \textbf{Utilizzo della classe Optional e costrutti funzionali}\\
+    Utilizzato per il recupero del giocatore umano all'interno di ActionController.
+    Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+	\item \textbf{Utlizzo di lambda expressions}\\
+	Utilizzati nel controller tramite \texttt{map} per il casting a run-time.
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+	\item \textbf{Utilizzo di riferimenti a metodi(Method Reference)}\\
+	All'interno dell'\texttt{Optional} del Controller si è sfruttato il costrutto \texttt{this::isHumanPlayer}per passare la firma del metodo.
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+	\item \textbf{Utilizzo di annotazioni di librerie di terze parti (SpotBugs)}\\
+	L'annotazione \texttt{@SuppressFBWarnings} è stata utilizzata per gestire l'esposizione intenzionale dei riferimenti interni.
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+                 \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/model/impl/AbstractPlayer.java}
+\end{itemize}
 
 \chapter{Commenti finali}
 
@@ -251,10 +314,22 @@ Questa esperienza è stata particolarmente formativa perché ha evidenziato sul 
 In un'ottica di sviluppo futuro, il progetto offre ampi margini di miglioramento. Il sistema delle statistiche potrebbe essere ampliato integrando lo storico delle partite e le classifiche, mentre l'interfaccia grafica trarrebbe beneficio da una maggiore cura estetica tramite l'aggiunta di animazioni e feedback visivi.
 Infine, la gestione del tavolo potrebbe sfruttare l'attuale modularità per supportare facilmente nuove modalità di gioco.
 
+\subsection*{Giulia Bardi}
+Il mio contributo nel progetto è stata nella gestione delle varie tipologie di partecipanti e della gestione delle azioni principali che posso eseguire i vari partecipanti.
+La parte più impegnativa è stata la gestione dei partecipanti principalmente per la scelta di come implementare il polimorfismo per evitare la duplicazione del codice.
+Invece per il controller è stato insidioso dovendo fungere da mediatore per proteggere l'integrità del Model durante i turni.
+Ritengo il lavoro soddisfacente con un'architettura che ha raggiunto un alto grado di disaccoppiamento.
+Questa esperienza è stata particolarmente formativa per la comprensione profonda dei pattern architetturali sul campo. Nello specifico, dover implementare l'MVC mi ha fatto scontrare con la necessità di separare nettamente le responsabilità.
+Inoltre mi ha permesso di lavorare in team e dividersi le responsabilità del lavoro.
+In un'ottica di sviluppo futuro,il progetto offre spunti di espansione come il miglioramento della logica intelligente per il bot,rendendolo più imprevedibile per il giocatore.
+
 \section{Difficoltà incontrate e commenti per i docenti}
 \subsection*{Evelyn Calandrini}
 Questo è stato il mio primo progetto e, soprattutto, la mia prima esperienza di sviluppo in un team. È stata un'esperienza molto formativa, che mi ha permesso di capire quanto sia importante non solo scrivere codice, 
 ma anche progettare correttamente il software, comunicare in modo efficace con gli altri membri del gruppo e sviluppare componenti che possano integrarsi facilmente con il lavoro degli altri.
+
+
+
 
 \appendix
 \chapter{Guida utente}
