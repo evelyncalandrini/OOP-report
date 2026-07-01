@@ -82,7 +82,7 @@ L'architettura si basa su queste componenti principali:
 \end{itemize}
 Il Model : Si occupa di gestire e mantenere in modo consistente lo stato interno del gioco (il mazzo di carte, i portafogli dei partecipanti, il calcolo dei punteggi nelle mani). Valida ed esegue tutte le mutazioni dello stato di gioco secondo le regole tradizionali del BlackJack e l'applicazione dei relativi modificatori speciali.
 \\
-Il controller : Rappresenta il motore attivo che si occupa di dettare  i tempi e l'ordine delle diverse fasi della partita (regolando i turni tra i giocatori presenti nel tavolo).
+Il controller : Rappresenta il motore attivo che si occupa di dettare i tempi e l'ordine delle diverse fasi della partita (regolando i turni tra i giocatori presenti nel tavolo).
 \\
 La View: Ha il ruolo generale di gestire la visualizzazione dei componenti all'interno della finestra, mostrando l'evoluzione della partita. Si occupa, inoltre, di gestire la fase di navigazione del menù, consentendo di avviare una nuova partita o vedere le statistiche dei round giocati. P
 
@@ -199,12 +199,12 @@ Come alternativa si era inizialmente valutato di inserire la struttura grafica d
 Qui emerge chiaramente l'uso architetturale del pattern MVC applicato ai singoli componenti. \texttt{PlayerWalletViewImpl} agisce come View pura: non possiede alcuna logica di gestione dei dati, non calcola le puntate né verifica se il saldo sia sufficiente (compiti di competenza del Model \texttt{StandardWallet}), ma si limita a visualizzare il valore fornito dal Controller tramite il metodo di aggiornamento.
 
 \subsection*{Giulia Bardi-Gestione dei partecipanti,protezione input e distinzione Uman-bot }
-In questa sezione verranno analizzate le scelte progettuali relative alla modellazione della gerarchia dei giocatori e del controller delle azini del gioco.
+In questa sezione verranno analizzate le scelte progettuali relative alla modellazione della gerarchia dei giocatori e del controller delle azioni del gioco.
 
 \subsubsection*{Gerarchia dei Partecipanti(Giocatori,Dealer e bot)}
 
 \paragraph*{Problema}
-Nella struttura di ChaosJack sono presenti diverse tipologie di giocatori che prendono parte al gioco:Il giocatore umano(Player), il bot( Npc) e il banco (Dealer).
+Nella struttura di ChaosJack sono presenti diverse tipologie di giocatori che prendono parte al gioco:Il giocatore umano(Player), il bot( NPC) e il banco (Dealer).
 Ognuno di essi possiede logiche diverse ma tutti e tre condividono delle caratteristiche come il nome, una mano di carte e nel caso del giocatore umano e del bot anche un portafoglio.
 Implementare separatamente queste tipologie avrebbe portato ad una grande quantità di duplicazione del codice e difficoltà di gestione per il sistema.
 
@@ -222,7 +222,7 @@ Questa architettura utilizza il Polimorfismo e il principio della Composizione.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{UML-partecipanti.png}
+    \includegraphics[width=0.9\textwidth]{UML_partecipanti.png}
     \caption{Diagramma UML delle classi relative ai Partecipanti}
 \end{figure}
 
@@ -231,7 +231,7 @@ Questa architettura utilizza il Polimorfismo e il principio della Composizione.
 \subsubsection*{Protezione degli input e Distinzione Umano-bot}
 \paragraph*{Problema}
 Essendo un gioco  a turni dove si mischiano giocatori umani e giocatori automatizzati come i bot e il banco si crea un problema di consistenza degli imput.
-Linterfaccia grafica inova i metodi pubblici de controller come \texttt{hit()} ,\texttt{stand()} e \texttt{doubleDown()} quando l’utente preme il pulsante.
+Linterfaccia grafica invoca i metodi pubblici del controller come \texttt{hit()} ,\texttt{stand()} e \texttt{doubleDown()} quando l’utente preme il pulsante.
 Se l’utente premesse tali pulsanti durante il turno di un bot ci sarebbe il rischio di alterare lo stato del gioco.
 
 \paragraph{Soluzione}
@@ -244,6 +244,41 @@ Nel caso in cui si trattti di un bot, non è permesso all’utente premere i var
     \includegraphics[width=0.4\textwidth]{UML-ActionController.png}
     \caption{Diagramma UML per l'ActionController}
 \end{figure}
+
+\subsection*{Beatrice Pallotti- Gestione dei round speciali, gestione dei turni e del flusso di gioco}
+
+In questa sezione si discuterà delle scelte progettuali per quanto riguarda la gestione dei round speciali, del flusso del gioco e della gestione dei turni.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{UML_specialRound}
+	\caption{diagramma relle classi special round}
+\end{figure}
+
+\subsection*{Creazione e gestione dei round speciali}
+\paragraph*{problema:} Il gioco ChaosJack prevede la presenta di più round speciali, ciascuno caratterizzato da delle precise regole per il calcolo dei punteggi delle mani dei giocatori. 
+La dinamica del gioco prevede che questi round speciali si attivino in maniera casuale all'inizio dei singoli round del gioco. La gestione di tutti questi round, con la relativa logica di calcolo degli score in una sola classe avrebbe portato ad un ampio uso di if-else rendendo la classe poco leggibile e poco flessibile a possibili cambiamenti.
+
+\paragraph*{Soluzione:} Per evitare il problema spiegato sopra si è optato per l'utilizzo del pattern di tipo Strategy che mi permette di andare a gestire in maniera dinamica l'attivazione oppure no dei round speciali al'interno del gioco.
+\begin{enumerate}
+	\item L'interfaccia \texttt{SpecialRound} è la \texttt{Strategy Interface} contenente il metodo \texttt{specialSCore(List<Card> playerscards)}. 
+	\item Le \texttt{Concrete Strategies} sono le tre classi che implementano in maniera concreta i round speciali, esse sono: \texttt{DoubleheartsRule,YingYung e RoyalFreezeTurn}. Ognuna di essa implementa le proprie regole per il calcolo del punteggio.
+	\item Il \texttt{Context} è la classe \texttt{GameEngineImpl} la quale ha \texttt{Optional<SpecialRound>} come riferimento al round attivo in quel momento del gioco ( null se il round attivo utilizza le regole base del gioco).Tramite il metodo \texttt{currentScore()} viene gestito il calcolo del punteggio richiamando le regole del round attivo.
+\end{enumerate}
+	Con questa soluzione si ha la possibilità di andare ad aggiungere in futuro eventuali round speciali creando una classe che vada ad implementare SpecialRound
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{UML_model-controller.png}
+	\caption{diagramma relativo al Gameengine e il GameFlowController}
+\end{figure}
+
+\subsection*{Model e controller}
+\paragraph*{Problema:} per determinate azioni del gioco è richiesta la coordinazione e il richiamo di più classi del dominio, un esempio può essere la gestione dei turni dei giocatori, la logica che permetta al giocatore di poter passare il proprio turno in maniera volontaria e , come detto prima, la logica con cui selezionare e implementare la regola per il calcolo dei punteggi.
+Se dovessimo delegare il controller alla gestione di tutte queste logiche il codice diventerebbe troppo pesante dato che si dovrebbe già occupare della gestione del flusso di gioco.
+
+\paragraph*{Soluzione:} Per risolvere il problema è stata creata la classe \texttt{GameEngineImpl} al cui interno si trovano i metodi che servono a gestire le logiche più complesse trattate sopra come ad esempio \texttt{nextTurn()} (per i turni dei giocatori), \texttt{stand} (per permettere ai giocatori di passare il turno volontariamente), \texttt{currentScore} (per applicare le giuste regole di calcolo del gioco), \texttt{resetGame} (che permette di andare a inizializzare il gioco ogni volta che si inizia un round).
+Con questa soluzione il controller potrà utilizzare queste logiche all'interno del suo codice andando a richiamare dei semplici metodi.
+
 
 \chapter{Sviluppo}
 \section{Testing automatizzato}
@@ -289,19 +324,74 @@ La suite di test è stata suddivisa nelle seguenti aree funzionali:
 \begin{itemize}
     \item \textbf{Utilizzo della classe Optional e costrutti funzionali}\\
     Utilizzato per il recupero del giocatore umano all'interno di ActionController.
-    Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+    Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L185}
 	\item \textbf{Utlizzo di lambda expressions}\\
 	Utilizzati nel controller tramite \texttt{map} per il casting a run-time.
-	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L186}
 	\item \textbf{Utilizzo di riferimenti a metodi(Method Reference)}\\
 	All'interno dell'\texttt{Optional} del Controller si è sfruttato il costrutto \texttt{this::isHumanPlayer}per passare la firma del metodo.
-	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L187}
 	\item \textbf{Utilizzo di annotazioni di librerie di terze parti (SpotBugs)}\\
 	L'annotazione \texttt{@SuppressFBWarnings} è stata utilizzata per gestire l'esposizione intenzionale dei riferimenti interni.
-	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java}
-                 \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/model/impl/AbstractPlayer.java}
+	Permalink : \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/controller/impl/ActionControllerImpl.java#L31}
+                 \url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/61dbd5ecbfbb5b63ae1a78c85f03cce47da244ca/src/main/java/it/unibo/chaosjack/model/impl/AbstractPlayer.java#L39}
 \end{itemize}
 
+\subsection*{Beatrice Pallotti}
+\begin{itemize}
+	\item \textbf{Utilizzo della classe Optional}
+	Utilizzata per il riferimento al round speciale.
+	Permalink:\url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/a372dd05d690b559e4186b1993c1903b468c322d/src/main/java/it/unibo/chaosjack/model/impl/GameEngineImpl.java#L28}
+	\item \textbf{Utilizzo di stream}
+	Utilizzato per controllare  che tutti i giocatori (ad eccezione del dealer) abbiano sballato ( abbiano uno score maggiore di 21).
+	Permalink:\url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/a372dd05d690b559e4186b1993c1903b468c322d/src/main/java/it/unibo/chaosjack/controller/impl/GameFlowControllerImpl.java#L236}
+	\item \textbf{Utilizzo delle lambda}
+	Utilizzate nel collegamento con i bottoni della view
+	Permalink:\url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/a372dd05d690b559e4186b1993c1903b468c322d/src/main/java/it/unibo/chaosjack/controller/impl/GameFlowControllerImpl.java#L114}
+	\item \textbf{Utilizzo libreria esterna JavaFX}
+	Ho utilizzato questa libreria per implementare il PauseTransition .Esso è stato utilizzato per far si che ci sia una pausa temporale tra le azioni dei bot (npc e dealer)
+	Utilizzo questa libreria per utilizzare Platform.exit() per chiudere l'interfaccia grafica.
+	Permalink:\url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/a372dd05d690b559e4186b1993c1903b468c322d/src/main/java/it/unibo/chaosjack/controller/impl/GameFlowControllerImpl.java#L302}
+	Permalink:\url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/a372dd05d690b559e4186b1993c1903b468c322d/src/main/java/it/unibo/chaosjack/controller/impl/GameFlowControllerImpl.java#L86}
+	\item \textbf{Utilizzo annotazioni di librerie di terze parti (SpotBugs)}
+	\texttt{@SuppressFBWarnings} è stata utilizzata per gestione dell'esposizione intenzionale a riferimenti esterni
+	Permalink:\url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/a372dd05d690b559e4186b1993c1903b468c322d/src/main/java/it/unibo/chaosjack/controller/impl/GameFlowControllerImpl.java#L53}
+	Permalink:\url{https://github.com/evelyncalandrini/OOP25-chaosjack/blob/a372dd05d690b559e4186b1993c1903b468c322d/src/main/java/it/unibo/chaosjack/model/impl/GameEngineImpl.java#L115}
+\end{itemize}
+
+	l'esempio di utilizzo per il pauseTransition è stato preso dal seguente link: \url{https://stackoverflow.com/questions/27334455/how-to-close-a-stage-after-a-certain-amount-of-time-javafx}
+
+    \subsection*{Elena Lungu}                                                                           
+    \begin{itemize}                                                                                     
+        \item \textbf{Utilizzo della classe Optional}                                                   
+        Utilizzata all'interno della classe \texttt{StandardDeck} per gestire in modo sicuro la pesca di
+  una carta dal mazzo, prevenendo la restituzione di valori nulli qualora il mazzo fosse vuoto.         
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-                                      
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/StandardDeck.java#L47-L51}          
+                                                              
+        \item \textbf{Utilizzo della libreria JavaFX e costrutti SVGPath}                               
+        Oltre all'impiego per la struttura generale delle viste del portafoglio e delle singole carte   
+  (\texttt{CardViewImpl} e \texttt{PlayerWalletViewImpl}), la libreria è stata sfruttata a un livello   
+  più avanzato tramite \texttt{javafx.scene.shape.SVGPath} per disegnare programmaticamente in formato  
+  vettoriale i simboli dei modificatori sulle carte.                                                    
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-                                      
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/view/impl/CardViewImpl.java#L164-L188}         
+        
+        \item \textbf{Utilizzo della classe di utilità Collections}
+        Impiegata in combinazione con la classe \texttt{StandardDeck} per applicare algoritmi di        
+  randomizzazione standard (\texttt{Collections.shuffle}) sia al mazzo di carte principale che al pool  
+  di modificatori speciali, garantendo un'adeguata casualità distributiva.
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/StandardDeck.java#L60-L61}          
+        
+        \item \textbf{Utilizzo estensivo di Enum per il Domain Driven Design}
+        Sfruttamento avanzato delle enumerazioni (es. \texttt{Suit}, \texttt{Rank},
+  \texttt{CardModifier}) per modellare in modo robusto le caratteristiche immutabili delle carte da     
+  gioco senza l'ausilio di magic strings o magic numbers.
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/StandardCard.java}
+    \end{itemize}
+    
 \chapter{Commenti finali}
 
 \section{Autovalutazione e lavori futuri}
@@ -323,13 +413,46 @@ Questa esperienza è stata particolarmente formativa per la comprensione profond
 Inoltre mi ha permesso di lavorare in team e dividersi le responsabilità del lavoro.
 In un'ottica di sviluppo futuro,il progetto offre spunti di espansione come il miglioramento della logica intelligente per il bot,rendendolo più imprevedibile per il giocatore.
 
+\subsection*{Beatrice Pallotti}
+il mio contrinuto per il progetto è stato nella gestione dei round speciali, nella gestione dei turni, nel creare la mano del giocatore e il controllo di flusso del gioco.
+Le parti più impegnative sono state su come controllare il flusso dovendo tener conto delle regole stabilite per il gioco e il coordinamento di tutte le classi del domnio dovendo utilizzarle tutte insieme per implementare determinate logiche.
+Questa esperienza è stata molto formativa dal punto di vista di come approcciarsi a un progetto e su come doversi rapportare con il proprio team cercando sempre di spiegarsi il più chiaramente possibile.
+
+\subsection*{Elena Lungu}
+Il mio contributo al progetto si è focalizzato sulla        
+  modellazione e implementazione del mazzo di carte (Deck e   
+  relative carte) e del portafoglio dei giocatori (Wallet) a  
+  livello di Model, oltre che sulla loro rappresentazione     
+  visiva all'interno della View. La parte più impegnativa è   
+  stata la gestione della logica delle carte e sopratutto delle carte speciali, e il corretto funzionamento del Wallet. Dal lato della View, la sfida         
+  principale è stata creare componenti grafiche (CardView e   
+  PlayerWalletView) che si aggiornassero dinamicamente e in   
+  modo pulito in risposta ai cambiamenti del Model. Ritengo il
+  lavoro complessivo molto soddisfacente, con una netta       
+  separazione delle responsabilità che rispetta pienamente il 
+  pattern MVC. Questa esperienza è stata particolarmente      
+  formativa perché mi ha permesso di capire sul campo quanto  
+  sia fondamentale progettare interfacce (API) chiare per     
+  permettere agli altri membri del team di usare il mio codice
+  senza doverne conoscere l'implementazione interna. In       
+  un'ottica di sviluppo futuro, il sistema del Wallet potrebbe
+  essere ampliato introducendo meccaniche di prestiti o       
+  ricompense giornaliere, mentre l'interfaccia grafica delle  
+  carte trarrebbe enorme beneficio dall'aggiunta di animazioni
+  fluide per la distribuzione e lo scarto, rendendo           
+  l'esperienza di gioco molto più immersiva.  
+
 \section{Difficoltà incontrate e commenti per i docenti}
 \subsection*{Evelyn Calandrini}
 Questo è stato il mio primo progetto e, soprattutto, la mia prima esperienza di sviluppo in un team. È stata un'esperienza molto formativa, che mi ha permesso di capire quanto sia importante non solo scrivere codice, 
 ma anche progettare correttamente il software, comunicare in modo efficace con gli altri membri del gruppo e sviluppare componenti che possano integrarsi facilmente con il lavoro degli altri.
 
+\subsection*{Giulia Bardi}
+Essendo il mio primo progetto inizialmente è stato difficile capire come cordinarsi e lavorare in team,però penso che mi sia servito molto per migliorare. 
+Questo sia dal punto di vista puramente tecnica sia per comprendere l'importanza della comunicazione tra membri dello stesso gruppo.
 
-
+\subsection*{Elena Lungu}
+Dal punto di vista tecnico, la vera sfida iniziale è stata imparare a utilizzare in maniera corretta Git: gestire i branch separati e sopravvivere ai conflitti di merge senza cancellare il lavoro altrui ha richiesto un po' di pratica. A livello architetturale, l'ostacolo maggiore è stato far dialogare le mie componenti con quelle del gruppo, mantenendo il disaccoppiamento delle parti nel rispetto del pattern MVC. Alla fine ho imparato l'importanza di Checkstyle e di un codice pulito per rendere la fase di integrazione decisamente più facile.
 
 \appendix
 \chapter{Guida utente}
