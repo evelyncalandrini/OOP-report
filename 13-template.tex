@@ -244,17 +244,18 @@ Nel caso in cui si trattti di un bot, non è permesso all’utente premere i var
     \includegraphics[width=0.4\textwidth]{UML-ActionController.png}
     \caption{Diagramma UML per l'ActionController}
 \end{figure}
+\newpage
 
 \subsection*{Beatrice Pallotti- Gestione dei round speciali, gestione dei turni e del flusso di gioco}
 
 In questa sezione si discuterà delle scelte progettuali per quanto riguarda la gestione dei round speciali, del flusso del gioco e della gestione dei turni.
-\begin{figure}
+
+\subsection*{Creazione e gestione dei round speciali}
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\textwidth]{UML_specialRound}
 	\caption{diagramma relle classi special round}
 \end{figure}
-
-\subsection*{Creazione e gestione dei round speciali}
 \paragraph*{problema:} Il gioco ChaosJack prevede la presenta di più round speciali, ciascuno caratterizzato da delle precise regole per il calcolo dei punteggi delle mani dei giocatori. 
 La dinamica del gioco prevede che questi round speciali si attivino in maniera casuale all'inizio dei singoli round del gioco. La gestione di tutti questi round, con la relativa logica di calcolo degli score in una sola classe avrebbe portato ad un ampio uso di if-else rendendo la classe poco leggibile e poco flessibile a possibili cambiamenti.
 
@@ -266,13 +267,12 @@ La dinamica del gioco prevede che questi round speciali si attivino in maniera c
 \end{enumerate}
 	Con questa soluzione si ha la possibilità di andare ad aggiungere in futuro eventuali round speciali creando una classe che vada ad implementare SpecialRound
 
-\begin{figure}
+\subsection*{Model e controller}
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\textwidth]{UML_model-controller.png}
 	\caption{diagramma relativo al Gameengine e il GameFlowController}
 \end{figure}
-
-\subsection*{Model e controller}
 \paragraph*{Problema:} per determinate azioni del gioco è richiesta la coordinazione e il richiamo di più classi del dominio, un esempio può essere la gestione dei turni dei giocatori, la logica che permetta al giocatore di poter passare il proprio turno in maniera volontaria e , come detto prima, la logica con cui selezionare e implementare la regola per il calcolo dei punteggi.
 Se dovessimo delegare il controller alla gestione di tutte queste logiche il codice diventerebbe troppo pesante dato che si dovrebbe già occupare della gestione del flusso di gioco.
 
