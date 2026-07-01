@@ -360,6 +360,38 @@ La suite di test è stata suddivisa nelle seguenti aree funzionali:
 \end{itemize}
 
 	l'esempio di utilizzo per il pauseTransition è stato preso dal seguente link: \url{https://stackoverflow.com/questions/27334455/how-to-close-a-stage-after-a-certain-amount-of-time-javafx}
+
+    \subsection*{Elena Lungu}                                                                           
+    \begin{itemize}                                                                                     
+        \item \textbf{Utilizzo della classe Optional}                                                   
+        Utilizzata all'interno della classe \texttt{StandardDeck} per gestire in modo sicuro la pesca di
+  una carta dal mazzo, prevenendo la restituzione di valori nulli qualora il mazzo fosse vuoto.         
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-                                      
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/StandardDeck.java#L47-L51}          
+                                                              
+        \item \textbf{Utilizzo della libreria JavaFX e costrutti SVGPath}                               
+        Oltre all'impiego per la struttura generale delle viste del portafoglio e delle singole carte   
+  (\texttt{CardViewImpl} e \texttt{PlayerWalletViewImpl}), la libreria è stata sfruttata a un livello   
+  più avanzato tramite \texttt{javafx.scene.shape.SVGPath} per disegnare programmaticamente in formato  
+  vettoriale i simboli dei modificatori sulle carte.                                                    
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-                                      
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/view/impl/CardViewImpl.java#L164-L188}         
+        
+        \item \textbf{Utilizzo della classe di utilità Collections}
+        Impiegata in combinazione con la classe \texttt{StandardDeck} per applicare algoritmi di        
+  randomizzazione standard (\texttt{Collections.shuffle}) sia al mazzo di carte principale che al pool  
+  di modificatori speciali, garantendo un'adeguata casualità distributiva.
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/StandardDeck.java#L60-L61}          
+        
+        \item \textbf{Utilizzo estensivo di Enum per il Domain Driven Design}
+        Sfruttamento avanzato delle enumerazioni (es. \texttt{Suit}, \texttt{Rank},
+  \texttt{CardModifier}) per modellare in modo robusto le caratteristiche immutabili delle carte da     
+  gioco senza l'ausilio di magic strings o magic numbers.
+        Permalink: \url{https://github.com/evelyncalandrini/OOP25-
+  chaosjack/blob/master/src/main/java/it/unibo/chaosjack/model/impl/StandardCard.java}
+    \end{itemize}
+    
 \chapter{Commenti finali}
 
 \section{Autovalutazione e lavori futuri}
@@ -386,6 +418,30 @@ il mio contrinuto per il progetto è stato nella gestione dei round speciali, ne
 Le parti più impegnative sono state su come controllare il flusso dovendo tener conto delle regole stabilite per il gioco e il coordinamento di tutte le classi del domnio dovendo utilizzarle tutte insieme per implementare determinate logiche.
 Questa esperienza è stata molto formativa dal punto di vista di come approcciarsi a un progetto e su come doversi rapportare con il proprio team cercando sempre di spiegarsi il più chiaramente possibile.
 
+\subsection*{Elena Lungu}
+Il mio contributo al progetto si è focalizzato sulla        
+  modellazione e implementazione del mazzo di carte (Deck e   
+  relative carte) e del portafoglio dei giocatori (Wallet) a  
+  livello di Model, oltre che sulla loro rappresentazione     
+  visiva all'interno della View. La parte più impegnativa è   
+  stata la gestione della logica delle carte e sopratutto delle carte speciali, e il corretto funzionamento del Wallet. Dal lato della View, la sfida         
+  principale è stata creare componenti grafiche (CardView e   
+  PlayerWalletView) che si aggiornassero dinamicamente e in   
+  modo pulito in risposta ai cambiamenti del Model. Ritengo il
+  lavoro complessivo molto soddisfacente, con una netta       
+  separazione delle responsabilità che rispetta pienamente il 
+  pattern MVC. Questa esperienza è stata particolarmente      
+  formativa perché mi ha permesso di capire sul campo quanto  
+  sia fondamentale progettare interfacce (API) chiare per     
+  permettere agli altri membri del team di usare il mio codice
+  senza doverne conoscere l'implementazione interna. In       
+  un'ottica di sviluppo futuro, il sistema del Wallet potrebbe
+  essere ampliato introducendo meccaniche di prestiti o       
+  ricompense giornaliere, mentre l'interfaccia grafica delle  
+  carte trarrebbe enorme beneficio dall'aggiunta di animazioni
+  fluide per la distribuzione e lo scarto, rendendo           
+  l'esperienza di gioco molto più immersiva.  
+
 \section{Difficoltà incontrate e commenti per i docenti}
 \subsection*{Evelyn Calandrini}
 Questo è stato il mio primo progetto e, soprattutto, la mia prima esperienza di sviluppo in un team. È stata un'esperienza molto formativa, che mi ha permesso di capire quanto sia importante non solo scrivere codice, 
@@ -395,6 +451,8 @@ ma anche progettare correttamente il software, comunicare in modo efficace con g
 Essendo il mio primo progetto inizialmente è stato difficile capire come cordinarsi e lavorare in team,però penso che mi sia servito molto per migliorare. 
 Questo sia dal punto di vista puramente tecnica sia per comprendere l'importanza della comunicazione tra membri dello stesso gruppo.
 
+\subsection*{Elena Lungu}
+Dal punto di vista tecnico, la vera sfida iniziale è stata imparare a utilizzare in maniera corretta Git: gestire i branch separati e sopravvivere ai conflitti di merge senza cancellare il lavoro altrui ha richiesto un po' di pratica. A livello architetturale, l'ostacolo maggiore è stato far dialogare le mie componenti con quelle del gruppo, mantenendo il disaccoppiamento delle parti nel rispetto del pattern MVC. Alla fine ho imparato l'importanza di Checkstyle e di un codice pulito per rendere la fase di integrazione decisamente più facile.
 
 \appendix
 \chapter{Guida utente}
